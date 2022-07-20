@@ -3,9 +3,7 @@ package jpa1;
 import jpa1.entity.Flat;
 
 import javax.persistence.*;
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 public class AppFlat {
     static EntityManagerFactory emf;
@@ -19,11 +17,11 @@ public class AppFlat {
             em = emf.createEntityManager();
             try {
                 while (true) {
-                    System.out.println("1: add flat");
-                    System.out.println("2: edit flat");
-                    System.out.println("3: search flat by params");
-                    System.out.println("4: delete flat");
-                    System.out.println("5: view all flats");
+                    System.out.println("1: add flat");  // OK
+                    System.out.println("2: edit flat"); // OK
+                    System.out.println("3: search flat by params"); // OK
+                    System.out.println("4: delete flat");  // OK
+                    System.out.println("5: view all flats"); // OK
                     System.out.print("-> ");
 
                     String s = sc.nextLine();
@@ -35,7 +33,7 @@ public class AppFlat {
                             editFlat(sc);
                             break;
                         case "3":
-                           // deleteClient(sc);
+                            searchByParams(sc);
                             break;
                         case "4":
                             deleteFlat(sc);
@@ -103,41 +101,67 @@ public class AppFlat {
     }
 
     private static void editFlat(Scanner sc) {
-        System.out.print("Enter client name: ");
-        String name = sc.nextLine();
+        System.out.print("Enter flat id: ");
+        String id = sc.nextLine();
+        long currentId = Long.parseLong(id);
 
+        System.out.print("Enter new name of district: ");
+        String district = sc.nextLine();
+        System.out.print("Enter new adress: ");
+        String adress = sc.nextLine();
+        System.out.println("Enter new area of flat");
+        double area = Double.parseDouble(sc.nextLine());
+        System.out.println("Enter the new count of room");
+        int countOfRoom = Integer.parseInt(sc.nextLine());
+        System.out.println("Enter new price of flat");
+        int priceFlat = Integer.parseInt(sc.nextLine());
 
-        System.out.print("Enter new age: ");
-        String sAge = sc.nextLine();
-        int age = Integer.parseInt(sAge);
-
-        SimpleClient c = null;
+        Flat flat = null;
         try {
             Query query = em.createQuery(
-                    "SELECT x FROM SimpleClient x WHERE x.name = :name", SimpleClient.class);
-            query.setParameter("name", name);
+                    "SELECT f FROM Flat f WHERE f.id = :id", Flat.class);
+            query.setParameter("id", currentId);
 
-            c = (SimpleClient) query.getSingleResult();
+
+            flat = (Flat) query.getSingleResult();
         } catch (NoResultException ex) {
-            System.out.println("Client not found!");
+            System.out.println("Flat not found!");
             return;
         } catch (NonUniqueResultException ex) {
             System.out.println("Non unique result!");
             return;
         }
 
-        ///........
-
         em.getTransaction().begin();
         try {
-            c.setAge(age);
+            flat.setDistrictOfCity(district);
+            flat.setAdress(adress);
+            flat.setAreaOfFlat(area);
+            flat.setCountOfRooms(countOfRoom);
+            flat.setPrice(priceFlat);
             em.getTransaction().commit();
         } catch (Exception ex) {
             em.getTransaction().rollback();
         }
     }
 
+    private static void searchByParams(Scanner sc) {
+        String sql = myQuerry(sc);
+       // System.out.println("My sql is: " + sql);
+        String sql1 = "SELECT f FROM Flat f " + sql;
+        System.out.println("===================================");
+        try {
+            Query query = em.createQuery(sql1);
+            List<Flat> listAllFlat = (List<Flat>) query.getResultList();
 
+            for (Flat flat : listAllFlat)
+                System.out.println(flat);
+            System.out.println("====================================");
+
+        } catch (Exception e) {
+            System.err.println("Not correct query");
+        }
+    }
 
     private static void viewAllFlats() {
         Query query = em.createQuery(
@@ -146,6 +170,48 @@ public class AppFlat {
 
         for (Flat flat : listAllFlat)
             System.out.println(flat);
+    }
+
+    private static String myQuerry(Scanner scanner) {
+        StringBuilder myQurry = new StringBuilder("WHERE ");
+
+        for (; ; ) {
+            System.out.println("Choose option for search and its value (use space between option and value)");
+            System.out.println("1: search by district of city");
+            System.out.println("2: search by adress");
+            System.out.println("3: search by area of flat");
+            System.out.println("4: search by the count of rooms");
+            System.out.println("5: search by price");
+            System.out.print("-> ");
+            String stroka = scanner.nextLine();
+            String[] search = stroka.split("[ .]");
+            StringBuilder value = new StringBuilder(stroka);
+            value.delete(0, 2);
+
+            switch (search[0]) {
+                case "1":
+                    myQurry.append("f.").append("districtOfCity=")
+                            .append("\'").append(value).append("\'").append(" AND ");
+                    break;
+                case "2":
+                    myQurry.append("f.").append("adress=")
+                            .append("\'").append(value).append("\'").append(" AND ");
+                    break;
+                case "3":
+                    myQurry.append("f.").append("areaOFlat=").append(search[1]).append(" AND ");
+                    break;
+                case "4":
+                    myQurry.append("f.").append("countOfRooms=").append(search[1]).append(" AND ");
+                    break;
+                case "5":
+                    myQurry.append("f.").append("price=").append(search[1]).append(" AND ");
+                    break;
+                case "":
+                    return myQurry.delete(myQurry.length() - 5, myQurry.length() - 1).toString();
+
+            }
+        }
+
     }
 
 }

@@ -12,7 +12,7 @@ public class Flat {
 
     @Id
     @Column(name = "id")
-    private int id;
+    private long id;
 
     @Column(name = "district_of_city")
     private String districtOfCity;
@@ -43,7 +43,7 @@ public class Flat {
         this.price = price;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -89,6 +89,18 @@ public class Flat {
 
     public void setUsed(boolean used) {
         isUsed = used;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public double getAreaOfFlat() {
+        return areaOfFlat;
+    }
+
+    public void setAreaOfFlat(double areaOfFlat) {
+        this.areaOfFlat = areaOfFlat;
     }
 
     @Override

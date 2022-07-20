@@ -20,6 +20,9 @@ public class Flat {
     @Column(name = "adress")
     private String adress;
 
+    @Column(name = "area_of_flat")
+    private double areaOfFlat;
+
     @Column(name = "count_of_rooms")
     private int countOfRooms;
 
@@ -30,6 +33,14 @@ public class Flat {
     private boolean isUsed;
 
     public Flat() {
+    }
+
+    public Flat(String districtOfCity, String adress, double areaOfFlat, int countOfRooms, int price) {
+        this.districtOfCity = districtOfCity;
+        this.adress = adress;
+        this.areaOfFlat = areaOfFlat;
+        this.countOfRooms = countOfRooms;
+        this.price = price;
     }
 
     public int getId() {
@@ -86,6 +97,7 @@ public class Flat {
                 "id=" + id +
                 ", districtOfCity='" + districtOfCity + '\'' +
                 ", adress='" + adress + '\'' +
+                ", areaOfFlat=" + areaOfFlat +
                 ", countOfRooms=" + countOfRooms +
                 ", price=" + price +
                 ", isUsed=" + isUsed +

@@ -99,6 +99,8 @@ public class App {
         System.out.print("Enter client name: ");
         String name = sc.nextLine();
 
+
+
         System.out.print("Enter new age: ");
         String sAge = sc.nextLine();
         int age = Integer.parseInt(sAge);
@@ -108,6 +110,7 @@ public class App {
             Query query = em.createQuery(
                     "SELECT x FROM SimpleClient x WHERE x.name = :name", SimpleClient.class);
             query.setParameter("name", name);
+
             c = (SimpleClient) query.getSingleResult();
         } catch (NoResultException ex) {
             System.out.println("Client not found!");

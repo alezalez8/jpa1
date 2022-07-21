@@ -17,11 +17,11 @@ public class AppFlat {
             em = emf.createEntityManager();
             try {
                 while (true) {
-                    System.out.println("1: add flat");  // OK
-                    System.out.println("2: edit flat"); // OK
-                    System.out.println("3: search flat by params"); // OK
-                    System.out.println("4: delete flat");  // OK
-                    System.out.println("5: view all flats"); // OK
+                    System.out.println("1: add flat");
+                    System.out.println("2: edit flat");
+                    System.out.println("3: search flat by params");
+                    System.out.println("4: delete flat");
+                    System.out.println("5: view all flats");
                     System.out.print("-> ");
 
                     String s = sc.nextLine();

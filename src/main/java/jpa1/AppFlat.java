@@ -13,7 +13,7 @@ public class AppFlat {
         Scanner sc = new Scanner(System.in);
         try {
 
-            emf = Persistence.createEntityManagerFactory("JPATest");
+            emf = Persistence.createEntityManagerFactory("Flat");
             em = emf.createEntityManager();
             try {
                 while (true) {
